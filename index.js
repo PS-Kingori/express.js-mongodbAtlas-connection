@@ -12,37 +12,33 @@ const PORT = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGODB_URI2,)
     .then(() => {
         console.log('MongoDB connected successfully');
+        createNewUser();
     })
     .catch(err => {
         console.error('MongoDB connection error:', err);
     });
 
-const movieSchema = new mongoose.Schema({}, { collection: 'movies' });
-const Movie = mongoose.model('Movie', movieSchema);
+     // Create a new model for the collection
+     const userSchema = new mongoose.Schema({
+        name: String,
+        email: String
+    });
 
+    // Create a new collection
+    const User = mongoose.model('User', userSchema);
 
-app.get('/movies', async (req, res) => {
+   // Function to create and save a new user document
+const createNewUser = async () => {
     try {
-        const movies = await Movie.find();
-        res.json(movies);
+      const newUser = new User({ name: 'John Doe', email: 'john@example.com' });
+      await newUser.save(); // save to the database
+      console.log('New user created and saved:', newUser);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      console.error('Error saving new user:', error);
     }
-});
-
-app.get('/movies/:id', async (req, res) => {
-    try {
-        const movie = await Movie.findById(req.params.id);
-        if (!movie) {
-            return res.status(404).json({ message: 'Movie not found' });
-        }
-        res.json(movie);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-
+  };
+    
+    
 
 
 app.listen(PORT, ()=>{
