@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-mongoose.connect(process.env.MONGODB_URI2,)
+mongoose.connect(process.env.MONGODB_URI3,)
     .then(() => {
         console.log('MongoDB connected successfully');
         createNewUser();
